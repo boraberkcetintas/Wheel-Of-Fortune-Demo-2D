@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class WheelContent: MonoBehaviour
 {
-    [HideInInspector] public double weight = 0f;
+    public double weight = 0f;
     public GameObject obje;
     public string RewardName;
     public Sprite Icon;

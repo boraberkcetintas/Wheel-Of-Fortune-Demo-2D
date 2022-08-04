@@ -35,7 +35,7 @@ public class WheelOfFortune : MonoBehaviour
     private bool isSpinning = false;
     private double accumulatedWeight = 0;
     private int maxIndex = 8; //Çarkda 8 boş alan olduğundan.
-    [HideInInspector]public int level = 1;
+    [HideInInspector] public int level = 1;
     private System.Random randomFromSystem = new System.Random();
     private int nextSafeZone = 5;
     private int nextSuperZone = 30;
@@ -65,7 +65,7 @@ public class WheelOfFortune : MonoBehaviour
             float leftOffset = (angle + 13) % 360;
             float randomAngle = Random.Range(leftOffset, rightOffset);
 
-            Vector3 targetRotation = Vector3.back * (randomAngle + (2* 360 * spinDuration));
+            Vector3 targetRotation = Vector3.back * (randomAngle + (2 * 360 * spinDuration));
 
             float prevAngle;
             prevAngle = SpinningWheel.eulerAngles.z;
@@ -122,10 +122,6 @@ public class WheelOfFortune : MonoBehaviour
 
             rewardPlaceHolder[i].GetChild(0).GetComponent<Image>().sprite = wheelContent[i].Icon;
 
-
-
-            CalculateUISize();
-
         }
 
     }
@@ -136,24 +132,22 @@ public class WheelOfFortune : MonoBehaviour
         for (int i = 0; i < maxIndex; i++)
         {
 
-            int randomRewardPoolIndex = Random.Range(0, rewardPool.Length);
+            int randomRewardPoolIndex = Random.Range(1, rewardPool.Length);
 
 
-            if ((level % 5 == 0 && rewardPool[randomRewardPoolIndex].IsBomb == true) || level == 1)
+            if (level % 5 == 0 || level == 1)
             {
                 randomRewardPoolIndex = Random.Range(1, rewardPool.Length); //Bomba mutlaka 0.indeksde olmalıdır.
+            }
+            else
+            {
+                randomRewardPoolIndex = 0;
             }
 
 
             while (LastRandoms.Contains(randomRewardPoolIndex)) // Ödüllerin aynı çarkda tekrar etmemesini sağlıyor.
             {
-                randomRewardPoolIndex = Random.Range(0, rewardPool.Length);
-
-
-                if (rewardPool[randomRewardPoolIndex].IsBomb == true && level % 5 == 0)
-                {
-                    randomRewardPoolIndex = Random.Range(1, rewardPool.Length);
-                }
+                randomRewardPoolIndex = Random.Range(1, rewardPool.Length);
             }
 
 
@@ -164,7 +158,6 @@ public class WheelOfFortune : MonoBehaviour
             wheelContent[i].Amount = rewardPool[randomRewardPoolIndex].Amount;
             wheelContent[i].Chance = rewardPool[randomRewardPoolIndex].Chance;
             wheelContent[i].IsBomb = rewardPool[randomRewardPoolIndex].IsBomb;
-            wheelContent[i].weight = rewardPool[randomRewardPoolIndex].weight;
 
         }
     }
@@ -180,7 +173,6 @@ public class WheelOfFortune : MonoBehaviour
             wheelContent[i].Amount = rewardPoolForSuperZone[randomRewardPoolIndex].Amount;
             wheelContent[i].Chance = rewardPoolForSuperZone[randomRewardPoolIndex].Chance;
             wheelContent[i].IsBomb = rewardPoolForSuperZone[randomRewardPoolIndex].IsBomb;
-            wheelContent[i].weight = rewardPoolForSuperZone[randomRewardPoolIndex].weight;
             //Havuza aynı ödüller gelmemesi için kontrol işlemi ekle;
         }
     }
@@ -190,6 +182,7 @@ public class WheelOfFortune : MonoBehaviour
     {
         CalculateWeights();
         double r = randomFromSystem.NextDouble() * accumulatedWeight;
+        Debug.Log("Seçilen ağırlık " + r);
 
         for (int j = 0; j < wheelContent.Length; j++)
         {
@@ -199,7 +192,6 @@ public class WheelOfFortune : MonoBehaviour
             }
 
         }
-
         return 0;
     }
 
@@ -207,15 +199,17 @@ public class WheelOfFortune : MonoBehaviour
     {
         for (int i = 0; i < wheelContent.Length; i++)
         {
+            wheelContent[i].weight = 0f;
+        }
+        accumulatedWeight = 0;
+
+        for (int i = 0; i < wheelContent.Length; i++)
+        {
             accumulatedWeight += wheelContent[i].Chance; //Toplam ağırlığı hesapla.
             wheelContent[i].weight = accumulatedWeight; // Toplam ağırlığı ödüle ata.
+            Debug.Log(wheelContent[i].RewardName + " " + wheelContent[i].weight);
             //Chance sıfır olanları dahil etmeme kodu yaz.
         }
-    }
-
-    void CalculateUISize()
-    {
-        //iconların ui büyüklüklerini ayarla
     }
 
     private void SetupAudio()
@@ -271,7 +265,7 @@ public class WheelOfFortune : MonoBehaviour
                 Debug.Log(earnedPrizes[i].RewardName + " miktarı " + earnedPrizes[i].Amount);
                 if (item != null)
                 {
-                    for(int x = 0; x< earnedprize_item_parent.childCount; x++)
+                    for (int x = 0; x < earnedprize_item_parent.childCount; x++)
                     {
                         if (earnedprize_item_parent.GetChild(x).transform.GetChild(0).GetComponent<Image>().sprite == earnedPrizes[i].Icon)
                         {
@@ -283,7 +277,7 @@ public class WheelOfFortune : MonoBehaviour
                             spawnObject.transform.rotation = wheelItem.obje.transform.rotation;
                             StartCoroutine(MoveInCanvas(spawnObject, earnedprize_item_parent.transform.GetChild(x).gameObject));
                         }
-                    }          
+                    }
                 }
                 break;
             }
@@ -313,7 +307,7 @@ public class WheelOfFortune : MonoBehaviour
 
             j++;
         }
-        
+
 
     }
     private GameObject InstantiateDataItem()
@@ -337,7 +331,7 @@ public class WheelOfFortune : MonoBehaviour
     {
         earnedprize_item_parent.parent.transform.SetParent(gameOverPanel.transform);
         gameOverPanel.SetActive(true);
-        if(wheelContent[index].IsBomb == true)
+        if (wheelContent[index].IsBomb == true)
         {
             gameOverPanel.transform.GetChild(0).gameObject.SetActive(true);
         }
