@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46d6f2ee6a0bf21409da179a57c4e37e, type: 3}
   m_Name: Pistol Point
   m_EditorClassIdentifier: 
-  weight: 0
-  RewardName: Pistol Point
-  Icon: {fileID: 21300000, guid: 55302bae0b002e147882bf4f7cdcd30a, type: 3}
-  Amount: 5
-  Chance: 100
-  IsBomb: 0
+  _rewardName: Pistol Point
+  _icon: {fileID: 21300000, guid: 55302bae0b002e147882bf4f7cdcd30a, type: 3}
+  _amount: 5
+  _chance: 25

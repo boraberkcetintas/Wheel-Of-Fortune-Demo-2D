@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46d6f2ee6a0bf21409da179a57c4e37e, type: 3}
   m_Name: Bayonet Easter Time
   m_EditorClassIdentifier: 
-  weight: 0
-  RewardName: Bayonet Easter Time
-  Icon: {fileID: 21300000, guid: 6ea4223af43d3c047bc4a2813a222385, type: 3}
-  Amount: 5
-  Chance: 100
-  IsBomb: 0
+  _rewardName: Bayonet Easter
+  _icon: {fileID: 21300000, guid: 6ea4223af43d3c047bc4a2813a222385, type: 3}
+  _amount: 20
+  _chance: 100

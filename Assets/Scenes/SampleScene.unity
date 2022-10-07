@@ -174,13 +174,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cb5b56fab59cb345a31b6fa2570de86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 0
-  obje: {fileID: 0}
-  RewardName: 
-  Icon: {fileID: 0}
-  Amount: 0
-  Chance: 100
-  IsBomb: 0
+  _rewardName: 
+  _icon: {fileID: 0}
+  _amount: 0
+  _chance: 0
+  _weight: 0
+  _object: {fileID: 0}
 --- !u!1 &107811785
 GameObject:
   m_ObjectHideFlags: 0
@@ -892,13 +891,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cb5b56fab59cb345a31b6fa2570de86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 0
-  obje: {fileID: 0}
-  RewardName: 
-  Icon: {fileID: 0}
-  Amount: 0
-  Chance: 100
-  IsBomb: 0
+  _rewardName: 
+  _icon: {fileID: 0}
+  _amount: 0
+  _chance: 0
+  _weight: 0
+  _object: {fileID: 0}
 --- !u!1 &312289640
 GameObject:
   m_ObjectHideFlags: 0
@@ -1510,13 +1508,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cb5b56fab59cb345a31b6fa2570de86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 0
-  obje: {fileID: 0}
-  RewardName: 
-  Icon: {fileID: 0}
-  Amount: 0
-  Chance: 100
-  IsBomb: 0
+  _rewardName: 
+  _icon: {fileID: 0}
+  _amount: 0
+  _chance: 0
+  _weight: 0
+  _object: {fileID: 0}
 --- !u!1 &409259026
 GameObject:
   m_ObjectHideFlags: 0
@@ -2455,6 +2452,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spinDuration: 5
+  _gameSettings: {fileID: 11400000, guid: 79f0c88454ec1a841a27df1688010642, type: 2}
   earnedprize_item: {fileID: 5702349017230913008, guid: 3ebbea97d61f8234f8d8eb3c936aa697, type: 3}
   earnedprize_dataitem: {fileID: 3061035236442178685, guid: 7c2452a070a6b8f428da1f9457c4e194, type: 3}
   gameOverPanel: {fileID: 1569091143}
@@ -3103,13 +3101,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cb5b56fab59cb345a31b6fa2570de86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 0
-  obje: {fileID: 0}
-  RewardName: 
-  Icon: {fileID: 0}
-  Amount: 0
-  Chance: 100
-  IsBomb: 0
+  _rewardName: 
+  _icon: {fileID: 0}
+  _amount: 0
+  _chance: 0
+  _weight: 0
+  _object: {fileID: 0}
 --- !u!1 &878520400
 GameObject:
   m_ObjectHideFlags: 0
@@ -3161,13 +3158,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cb5b56fab59cb345a31b6fa2570de86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 0
-  obje: {fileID: 0}
-  RewardName: 
-  Icon: {fileID: 0}
-  Amount: 0
-  Chance: 100
-  IsBomb: 0
+  _rewardName: 
+  _icon: {fileID: 0}
+  _amount: 0
+  _chance: 0
+  _weight: 0
+  _object: {fileID: 0}
 --- !u!1 &908810192
 GameObject:
   m_ObjectHideFlags: 0
@@ -3219,13 +3215,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cb5b56fab59cb345a31b6fa2570de86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 0
-  obje: {fileID: 0}
-  RewardName: 
-  Icon: {fileID: 0}
-  Amount: 0
-  Chance: 100
-  IsBomb: 0
+  _rewardName: 
+  _icon: {fileID: 0}
+  _amount: 0
+  _chance: 0
+  _weight: 0
+  _object: {fileID: 0}
 --- !u!1 &990690423
 GameObject:
   m_ObjectHideFlags: 0
@@ -4007,13 +4002,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cb5b56fab59cb345a31b6fa2570de86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 0
-  obje: {fileID: 0}
-  RewardName: 
-  Icon: {fileID: 0}
-  Amount: 0
-  Chance: 100
-  IsBomb: 0
+  _rewardName: 
+  _icon: {fileID: 0}
+  _amount: 0
+  _chance: 0
+  _weight: 0
+  _object: {fileID: 0}
 --- !u!1 &1327830568
 GameObject:
   m_ObjectHideFlags: 0
@@ -4335,13 +4329,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cb5b56fab59cb345a31b6fa2570de86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 0
-  obje: {fileID: 0}
-  RewardName: 
-  Icon: {fileID: 0}
-  Amount: 0
-  Chance: 100
-  IsBomb: 0
+  _rewardName: 
+  _icon: {fileID: 0}
+  _amount: 0
+  _chance: 0
+  _weight: 0
+  _object: {fileID: 0}
 --- !u!1 &1569091143
 GameObject:
   m_ObjectHideFlags: 0

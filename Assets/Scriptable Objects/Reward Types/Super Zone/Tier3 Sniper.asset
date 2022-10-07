@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46d6f2ee6a0bf21409da179a57c4e37e, type: 3}
   m_Name: Tier3 Sniper
   m_EditorClassIdentifier: 
-  weight: 0
-  RewardName: Tier3 Sniper
-  Icon: {fileID: 21300000, guid: f255e5ab0d5839c4790df80cb663be7d, type: 3}
-  Amount: 20
-  Chance: 100
-  IsBomb: 0
+  _rewardName: Tier 3 Sniper
+  _icon: {fileID: 21300000, guid: f255e5ab0d5839c4790df80cb663be7d, type: 3}
+  _amount: 20
+  _chance: 100

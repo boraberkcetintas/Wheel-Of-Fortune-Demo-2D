@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46d6f2ee6a0bf21409da179a57c4e37e, type: 3}
   m_Name: Grenade
   m_EditorClassIdentifier: 
-  weight: 800
-  RewardName: Grenade
-  Icon: {fileID: 21300000, guid: 5b7e26ccc4a8f184dba253b9fba5bbbd, type: 3}
-  Amount: 2
-  Chance: 100
-  IsBomb: 0
+  _rewardName: Grenade
+  _icon: {fileID: 21300000, guid: 5b7e26ccc4a8f184dba253b9fba5bbbd, type: 3}
+  _amount: 3
+  _chance: 25
