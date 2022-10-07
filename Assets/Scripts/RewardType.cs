@@ -15,5 +15,4 @@ public class RewardType : ScriptableObject
     [Range(0f, 100f)]
     public float Chance = 100;
 
-    public bool IsBomb;
 }

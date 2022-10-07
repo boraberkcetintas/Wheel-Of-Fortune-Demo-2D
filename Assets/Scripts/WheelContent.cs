@@ -11,7 +11,6 @@ public class WheelContent: MonoBehaviour
     [Range(0f, 100f)]
     public float Chance = 100;
 
-    public bool IsBomb;
 
     private void Start()
     {

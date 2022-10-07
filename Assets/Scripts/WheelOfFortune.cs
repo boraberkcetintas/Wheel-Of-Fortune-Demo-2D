@@ -109,7 +109,7 @@ public class WheelOfFortune : MonoBehaviour
 
         for (int i = 0; i < wheelContent.Length; i++)
         {
-            if (wheelContent[i].IsBomb == true)
+            if (wheelContent[i].RewardName == "Bomb")
             {
                 rewardPlaceHolder[i].GetChild(1).GetComponent<TextMeshProUGUI>().text = " ";
                 rewardPlaceHolder[i].GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(75, 75);
@@ -157,7 +157,6 @@ public class WheelOfFortune : MonoBehaviour
             wheelContent[i].Icon = rewardPool[randomRewardPoolIndex].Icon;
             wheelContent[i].Amount = rewardPool[randomRewardPoolIndex].Amount;
             wheelContent[i].Chance = rewardPool[randomRewardPoolIndex].Chance;
-            wheelContent[i].IsBomb = rewardPool[randomRewardPoolIndex].IsBomb;
 
         }
     }
@@ -172,7 +171,6 @@ public class WheelOfFortune : MonoBehaviour
             wheelContent[i].Icon = rewardPoolForSuperZone[randomRewardPoolIndex].Icon;
             wheelContent[i].Amount = rewardPoolForSuperZone[randomRewardPoolIndex].Amount;
             wheelContent[i].Chance = rewardPoolForSuperZone[randomRewardPoolIndex].Chance;
-            wheelContent[i].IsBomb = rewardPoolForSuperZone[randomRewardPoolIndex].IsBomb;
             //Havuza aynı ödüller gelmemesi için kontrol işlemi ekle;
         }
     }
@@ -221,7 +219,7 @@ public class WheelOfFortune : MonoBehaviour
 
     IEnumerator SpinCompleted(float time)
     {
-        if (wheelContent[index].IsBomb == true)
+        if (wheelContent[index].RewardName == "Bomb")
         {
             //Gameover
             GameOver();
@@ -331,7 +329,7 @@ public class WheelOfFortune : MonoBehaviour
     {
         earnedprize_item_parent.parent.transform.SetParent(gameOverPanel.transform);
         gameOverPanel.SetActive(true);
-        if (wheelContent[index].IsBomb == true)
+        if (wheelContent[index].RewardName == "Bomb")
         {
             gameOverPanel.transform.GetChild(0).gameObject.SetActive(true);
         }
