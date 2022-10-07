@@ -6,13 +6,16 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Reward Type", menuName = "Reward Type")]
 public class RewardType : ScriptableObject
 {
-    [HideInInspector] public double weight = 0f;
+    [SerializeField] private string _rewardName;
+    public string RewardName { get { return _rewardName; } }
 
-    public string RewardName;
-    public Sprite Icon;
-    public int Amount;
+    [SerializeField] private Sprite _icon;
+    public Sprite Icon { get { return _icon; } }
+
+    [SerializeField] private int _amount;
+    public int Amount { get { return _amount; } }
 
     [Range(0f, 100f)]
-    public float Chance = 100;
-
+    [SerializeField] private float _chance;
+    public float Chance { get { return _chance; } }
 }
