@@ -2,18 +2,27 @@ using UnityEngine;
 
 public class WheelContent: MonoBehaviour
 {
-    public double weight = 0f;
-    public GameObject obje;
-    public string RewardName;
-    public Sprite Icon;
-    public int Amount;
+    [SerializeField] private string _rewardName;
+    public string RewardName { get { return _rewardName; } set { _rewardName = value; } }
 
+    [SerializeField] private Sprite _icon;
+    public Sprite Icon { get { return _icon; } set { _icon = value; } }
+
+    [SerializeField] private int _amount;
+    public int Amount { get { return _amount; } set { _amount = value; } }
+    
     [Range(0f, 100f)]
-    public float Chance = 100;
+    [SerializeField] private float _chance;
+    public float Chance { get { return _chance; } set { _chance = value; } }
 
+    [SerializeField] private double _weight = 0f;
+    public double Weight { get { return _weight; } set { _weight = value; } }
+
+    [SerializeField] private GameObject _object;
+    public GameObject Object { get { return _object; } }
 
     private void Start()
     {
-        obje = gameObject;
+        _object = gameObject;
     }
 }
