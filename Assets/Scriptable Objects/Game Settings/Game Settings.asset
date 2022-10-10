@@ -12,4 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fe4b805e6e553247a734344d4771fa3, type: 3}
   m_Name: Game Settings
   m_EditorClassIdentifier: 
-  _spacingBetweenEarnedPrizes: -55
+  SafeZoneLevel: 5
+  SuperZoneLevel: 30
+  MaxContentCountInWheel: 8
+  SpinDuration: 4
+  WheelTurnCount: 2
+  RewardPlaceHolderOffset: 13
+  WheelBombSpriteSize: {x: 75, y: 75}
+  WheelOtherSpriteSize: {x: 45, y: 45}

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b303974d638b1b94e8644384e4a050ab, type: 3}
   m_Name: Wheel Sprites
   m_EditorClassIdentifier: 
-  _wheelGoldenBase: {fileID: 0}
-  _wheelSilverBase: {fileID: 0}
-  _wheelBronzeBase: {fileID: 0}
-  _wheelGoldenIndicator: {fileID: 0}
-  _wheelSilverIndicator: {fileID: 0}
-  _wheelBronzeIndicator: {fileID: 0}
+  _wheelGoldenBase: {fileID: 21300000, guid: 8bd2b39798b75974e9c2f3f9b38b81c8, type: 3}
+  _wheelSilverBase: {fileID: 21300000, guid: fff217de166347b4bbbbba99befe3b14, type: 3}
+  _wheelBronzeBase: {fileID: 21300000, guid: 55ae4357bdb0ae44f981fac9602754e2, type: 3}
+  _wheelGoldenIndicator: {fileID: 21300000, guid: a59980684bb7fe44186b32d34141b6ac, type: 3}
+  _wheelSilverIndicator: {fileID: 21300000, guid: dd4b256f619046b40a614818c530234f, type: 3}
+  _wheelBronzeIndicator: {fileID: 21300000, guid: 09eb98fcabbcb9c4a82db1fbd555730d, type: 3}
