@@ -15,7 +15,6 @@ public class WheelSprites : ScriptableObject
     [SerializeField] private Sprite _wheelBronzeBase;
     public Sprite WheelBronzeBase { get { return _wheelBronzeBase; } }
 
-    
     [SerializeField] private Sprite _wheelGoldenIndicator;
     public Sprite WheelGoldenIndicator { get { return _wheelGoldenIndicator; } }
     
