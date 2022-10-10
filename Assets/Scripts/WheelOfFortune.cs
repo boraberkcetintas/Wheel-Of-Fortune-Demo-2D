@@ -11,41 +11,50 @@ public class WheelOfFortune : MonoBehaviour
     [SerializeField] private WheelSprites _wheelSprites;
     [SerializeField] private Image image_spinning_wheel;
     [SerializeField] private Image Image_spinning_wheel_indicator;
+    [Space]
     [SerializeField] private GameObject earnedprize_item;
     [SerializeField] private GameObject earnedprize_dataitem;
     [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private GameObject gameOverPanelClaimText;
+    [SerializeField] private GameObject gameOverPanelLoseText;
+    [Space]
     [SerializeField] private Transform earnedprize_item_parent;
     [SerializeField] private Transform SpinningWheel;
+    [Space]
     [SerializeField] private Button ui_text_button_spin;
+    [SerializeField] private Button ui_text_button_claim;
+    [Space]
     [SerializeField] private TextMeshProUGUI ui_text_button_spin_text;
     [SerializeField] private TextMeshProUGUI ui_text_level_value;
     [SerializeField] private TextMeshProUGUI ui_text_nextsafezone_value;
     [SerializeField] private TextMeshProUGUI ui_text_nextsuperzone_value;
     [Space]
-    [Header("Sound")]
     [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip tickAudioClip;
-    [SerializeField] [Range(0f, 1f)] private float volume = .5f;
-    [SerializeField] [Range(-3f, 3f)] private float pitch = 1f;
     [Space]
     [Header("Item Pools")]
     [SerializeField] private RewardType[] rewardPool;
     [SerializeField] private RewardType[] rewardPoolForSuperZone;
     [SerializeField] private Transform[] rewardPlaceHolder;
+    [SerializeField] private Image[] rewardPlaceHolderImageChild;
+    [SerializeField] private RectTransform[] rewardPlaceHolderImageChildRectTransform;
+    [SerializeField] private TextMeshProUGUI[] rewardPlaceHolderTextChild;
 
     public WheelContent[] wheelContent = new WheelContent[8];
     public List<WheelContent> earnedPrizes = new();
 
     private bool isSpinning = false;
     private double accumulatedWeight = 0;
-    [HideInInspector] public int level = 1;
+    private int level = 1;
     private System.Random randomFromSystem = new System.Random();
     private int nextSafeZone;
     private int nextSuperZone;
-    GameObject spawnObject;
-    [HideInInspector] private int index;
+    GameObject FloatingReward;
+    private int EarnedPrizeIndex;
+    private float NextPositionForNextReward;
     void Start()
     {
+        ui_text_button_claim.interactable = false;
+        NextPositionForNextReward = _gameSettings.SpacingForEarnedPrizeBoard;
         nextSafeZone = _gameSettings.SafeZoneLevel;
         nextSuperZone = _gameSettings.SuperZoneLevel;
 
@@ -65,41 +74,45 @@ public class WheelOfFortune : MonoBehaviour
         {
             isSpinning = true;
             ui_text_button_spin.interactable = false;
+            ui_text_button_claim.interactable = false;
             ui_text_button_spin_text.text = "Spinning";
-
-            index = GetRandomReward();
-            float angle = -(45 * index);
-            float RewardPlaceHolderRightOffset = (angle - _gameSettings.RewardPlaceHolderOffset) % 360;
-            float RewardPlaceHolderLeftOffset = (angle + _gameSettings.RewardPlaceHolderOffset) % 360;
-            float randomAngle = Random.Range(RewardPlaceHolderLeftOffset, RewardPlaceHolderRightOffset);
-
-            Vector3 targetRotation = Vector3.back * (randomAngle + (_gameSettings.WheelTurnCount * 360 * _gameSettings.SpinDuration));
 
             float prevAngle;
             prevAngle = SpinningWheel.eulerAngles.z;
             float sumDeltaRotationZ = 0;
 
             SpinningWheel
-                .DORotate(targetRotation, _gameSettings.SpinDuration, RotateMode.Fast)
-                .SetEase(Ease.InOutQuart)
+                .DORotate(CalculateTargetRotation(), _gameSettings.SpinDuration, RotateMode.Fast)
+                .SetEase(_gameSettings.SpinningType)
                 .OnUpdate(() =>
                 {
-
                     float deltaRotationZ = Mathf.Abs(SpinningWheel.eulerAngles.z - prevAngle);
                     sumDeltaRotationZ = +deltaRotationZ;
-                    if (sumDeltaRotationZ >= 45f)
+                    if (sumDeltaRotationZ >= 360 / _gameSettings.MaxContentCountInWheel)
                     {
                         sumDeltaRotationZ = 0;
                         audioSource.PlayOneShot(audioSource.clip);
                     }
                     prevAngle = SpinningWheel.eulerAngles.z;
-
                 })
                 .OnComplete(() =>
                 {
-                    StartCoroutine(SpinCompleted(1));
+                    StartCoroutine(SpinCompleted(_gameSettings.WaitingTimeAfterSpinCompleted));
                 });
         }
+    }
+
+    private Vector3 CalculateTargetRotation()
+    {
+        EarnedPrizeIndex = GetRandomReward();
+        float anglePerPiece = -(360 / _gameSettings.MaxContentCountInWheel * EarnedPrizeIndex);
+        float RewardPlaceHolderRightOffset = (anglePerPiece - _gameSettings.RewardPlaceHolderOffset) % 360;
+        float RewardPlaceHolderLeftOffset = (anglePerPiece + _gameSettings.RewardPlaceHolderOffset) % 360;
+        float randomAngle = Random.Range(RewardPlaceHolderLeftOffset, RewardPlaceHolderRightOffset);
+
+        Vector3 targetRotation = Vector3.back * (randomAngle + (_gameSettings.WheelTurnCount * 360 * _gameSettings.SpinDuration));
+
+        return targetRotation;
     }
 
     private void FillWheelWithRewards()
@@ -119,17 +132,15 @@ public class WheelOfFortune : MonoBehaviour
         {
             if (wheelContent[i].RewardName == "Bomb")
             {
-                rewardPlaceHolder[i].GetChild(1).GetComponent<TextMeshProUGUI>().text = " ";
-                rewardPlaceHolder[i].GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(75, 75);
+                rewardPlaceHolderTextChild[i].text = " ";
+                rewardPlaceHolderImageChildRectTransform[i].sizeDelta = _gameSettings.WheelBombSpriteSize;
             }
             else
             {
-                rewardPlaceHolder[i].GetChild(1).GetComponent<TextMeshProUGUI>().text = wheelContent[i].Amount.ToString();
-                rewardPlaceHolder[i].GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(45, 45);
+                rewardPlaceHolderTextChild[i].text = wheelContent[i].Amount.ToString();
+                rewardPlaceHolderImageChildRectTransform[i].sizeDelta = _gameSettings.WheelOtherSpriteSize;
             }
-
-            rewardPlaceHolder[i].GetChild(0).GetComponent<Image>().sprite = wheelContent[i].Icon;
-
+            rewardPlaceHolderImageChild[i].sprite = wheelContent[i].Icon;
         }
 
     }
@@ -143,7 +154,7 @@ public class WheelOfFortune : MonoBehaviour
 
             if (level % _gameSettings.SafeZoneLevel == 0 || level == 1)
             {
-                randomRewardPoolIndex = Random.Range(1, rewardPool.Length); //Bomba mutlaka 0.indeksde olmalıdır.
+                randomRewardPoolIndex = Random.Range(1, rewardPool.Length); //Bomb must be in index zero in reward pool.
             }
             else
             {
@@ -151,7 +162,7 @@ public class WheelOfFortune : MonoBehaviour
             }
 
 
-            while (LastRandoms.Contains(randomRewardPoolIndex)) // Ödüllerin aynı çarkda tekrar etmemesini sağlıyor.
+            while (LastRandoms.Contains(randomRewardPoolIndex)) // It ensures that the rewards do not repeat on the same wheel.
             {
                 randomRewardPoolIndex = Random.Range(1, rewardPool.Length);
             }
@@ -205,38 +216,38 @@ public class WheelOfFortune : MonoBehaviour
         {
             wheelContent[i].Weight = 0f;
         }
-        accumulatedWeight = 0;
+        accumulatedWeight = 0; // Set it zero for next calculation.
 
         for (int i = 0; i < wheelContent.Length; i++)
         {
-            accumulatedWeight += wheelContent[i].Chance; //Toplam ağırlığı hesapla.
-            wheelContent[i].Weight = accumulatedWeight; // Toplam ağırlığı ödüle ata.
+            accumulatedWeight += wheelContent[i].Chance; //Calculate accumulated weight.
+            wheelContent[i].Weight = accumulatedWeight; // Set accumulated weight to an item.
             Debug.Log(wheelContent[i].RewardName + " " + wheelContent[i].Weight);
-            //Chance sıfır olanları dahil etmeme kodu yaz.
         }
     }
 
     private void SetupAudio()
     {
-        audioSource.clip = tickAudioClip;
-        audioSource.volume = volume;
-        audioSource.pitch = pitch;
+        audioSource.clip = _gameSettings.TickAudioClip;
+        audioSource.volume = _gameSettings.Volume;
+        audioSource.pitch = _gameSettings.Pitch;
     }
 
     IEnumerator SpinCompleted(float time)
     {
-        if (wheelContent[index].RewardName == "Bomb")
+        if (wheelContent[EarnedPrizeIndex].RewardName == "Bomb")
         {
             GameOver();
         }
         else
         {
-            UpdateEarnedPrizes(index);
+            UpdateEarnedPrizes(EarnedPrizeIndex);
 
             yield return new WaitForSeconds(time);
 
 
             ui_text_button_spin.interactable = true;
+            ui_text_button_claim.interactable = true;
             ui_text_button_spin_text.text = "Spin";
             isSpinning = false;
             level++;
@@ -256,6 +267,8 @@ public class WheelOfFortune : MonoBehaviour
     private bool itemExist;
     private int itemIndex = 0;
     GameObject item;
+
+    // Updates existing rewards (amounts) or calls another method to create new one.
     private void UpdateEarnedPrizes(int index)
     {
         itemExist = false;
@@ -275,11 +288,11 @@ public class WheelOfFortune : MonoBehaviour
                         {
                             earnedprize_item_parent.transform.GetChild(x).transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = earnedPrizes[i].Amount.ToString();
 
-                            spawnObject = Instantiate(wheelItem.Object);
-                            spawnObject.transform.parent = transform;
-                            spawnObject.transform.position = wheelItem.Object.transform.position;
-                            spawnObject.transform.rotation = wheelItem.Object.transform.rotation;
-                            StartCoroutine(MoveInCanvas(spawnObject, earnedprize_item_parent.transform.GetChild(x).gameObject));
+                            FloatingReward = Instantiate(wheelItem.Object);
+                            FloatingReward.transform.parent = transform;
+                            FloatingReward.transform.position = wheelItem.Object.transform.position;
+                            FloatingReward.transform.rotation = wheelItem.Object.transform.rotation;
+                            StartCoroutine(MoveInCanvas(FloatingReward, earnedprize_item_parent.transform.GetChild(x).gameObject));
                         }
                     }
                 }
@@ -295,7 +308,7 @@ public class WheelOfFortune : MonoBehaviour
             earnedPrizes[itemIndex].Icon = wheelItem.Icon;
             earnedPrizes[itemIndex].name = wheelItem.RewardName;
 
-            item = InstantiateEPItem();
+            item = InstantiateRewardInEarnedPrizeBoard();
 
             item.transform.GetChild(0).GetComponent<Image>().sprite = earnedPrizes[itemIndex].Icon;
             item.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = earnedPrizes[itemIndex].Amount.ToString();
@@ -303,56 +316,61 @@ public class WheelOfFortune : MonoBehaviour
             Debug.Log(earnedPrizes[itemIndex].RewardName + " listeye eklendi.");
             item.SetActive(false);
 
-            spawnObject = Instantiate(wheelItem.Object);
-            spawnObject.transform.parent = transform;
-            spawnObject.transform.position = wheelItem.Object.transform.position;
-            spawnObject.transform.rotation = wheelItem.Object.transform.rotation;
-            StartCoroutine(MoveInCanvas(spawnObject, item));
+            FloatingReward = Instantiate(wheelItem.Object);
+            FloatingReward.transform.parent = transform;
+            FloatingReward.transform.position = wheelItem.Object.transform.position;
+            FloatingReward.transform.rotation = wheelItem.Object.transform.rotation;
+            StartCoroutine(MoveInCanvas(FloatingReward, item));
 
             itemIndex++;
         }
 
 
     }
+
+    //Creates a new data item that holds data for rewards.
     private GameObject InstantiateDataItem()
     {
         return Instantiate(earnedprize_dataitem);
     }
 
 
-    private float posY = -110;
-    private GameObject InstantiateEPItem()
+    // Creates a new reward item for earned prize board.
+    private GameObject InstantiateRewardInEarnedPrizeBoard()
     {
         GameObject item = Instantiate(earnedprize_item, earnedprize_item_parent);
 
         RectTransform rectTransform = item.GetComponent<RectTransform>();
-        rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, rectTransform.anchoredPosition.y + posY);
-        posY += -110;
+        rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, rectTransform.anchoredPosition.y + NextPositionForNextReward);
+        NextPositionForNextReward += _gameSettings.SpacingForEarnedPrizeBoard;
 
         return item;
     }
 
+    // Game overs for two situations. Player claims rewards or gets bomb from wheel.
     public void GameOver()
     {
         earnedprize_item_parent.parent.transform.SetParent(gameOverPanel.transform);
         gameOverPanel.SetActive(true);
-        if (wheelContent[index].RewardName == "Bomb")
+        if (wheelContent[EarnedPrizeIndex].RewardName == "Bomb")
         {
-            gameOverPanel.transform.GetChild(0).gameObject.SetActive(true);
+           gameOverPanelLoseText.SetActive(true);
         }
         else
         {
-            gameOverPanel.transform.GetChild(1).gameObject.SetActive(true);
+            gameOverPanelClaimText.SetActive(true);
         }
     }
 
+
+    // Make icons move to the reward board from the wheel.
     IEnumerator MoveInCanvas(GameObject icon, GameObject target)
     {
-        icon.transform.position = Vector3.Lerp(icon.transform.position, target.transform.position, Time.deltaTime * 12f);
+        icon.transform.position = Vector3.Lerp(icon.transform.position, target.transform.position, Time.deltaTime * _gameSettings.MoveInCanvasLerp);
 
         yield return null;
 
-        if (Mathf.Abs(Vector3.Distance(target.transform.position, icon.transform.position)) > 0.2f)
+        if (Mathf.Abs(Vector3.Distance(target.transform.position, icon.transform.position)) > _gameSettings.MoveInCanvasStopLimit)
         {
             StartCoroutine(MoveInCanvas(icon, target));
         }
@@ -363,6 +381,7 @@ public class WheelOfFortune : MonoBehaviour
         }
     }
 
+    // Updates the sprite of the wheel for next level.
     private void UpdateWheelSprite()
     {
         if (level % _gameSettings.SuperZoneLevel == 0)
@@ -381,10 +400,5 @@ public class WheelOfFortune : MonoBehaviour
             image_spinning_wheel.sprite = _wheelSprites.WheelBronzeBase;
             Image_spinning_wheel_indicator.sprite = _wheelSprites.WheelBronzeIndicator;
         }
-    }
-
-    private void UpdateText(TextMeshProUGUI textObject, string text)
-    {
-        textObject.text = text;
     }
 }

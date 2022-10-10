@@ -15,8 +15,16 @@ MonoBehaviour:
   SafeZoneLevel: 5
   SuperZoneLevel: 30
   MaxContentCountInWheel: 8
+  MoveInCanvasStopLimit: 0.2
+  MoveInCanvasLerp: 12
   SpinDuration: 4
   WheelTurnCount: 2
   RewardPlaceHolderOffset: 13
+  WaitingTimeAfterSpinCompleted: 1
+  SpinningType: 7
   WheelBombSpriteSize: {x: 75, y: 75}
   WheelOtherSpriteSize: {x: 45, y: 45}
+  SpacingForEarnedPrizeBoard: -110
+  TickAudioClip: {fileID: 8300000, guid: f64c21814a45d3244b4e25c2f41d0210, type: 3}
+  Volume: 0.5
+  Pitch: 1

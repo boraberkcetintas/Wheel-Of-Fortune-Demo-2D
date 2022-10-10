@@ -29,15 +29,6 @@ public class UIManager : MonoBehaviour
         {
             SceneManager.LoadScene(0);
         });
-        ui_text_button_claim.interactable = false;
-    }
-
-    private void Update()
-    {
-        if (wheelOfFortune.level > 1)
-        {
-            ui_text_button_claim.interactable = true;
-        }
     }
 }
 

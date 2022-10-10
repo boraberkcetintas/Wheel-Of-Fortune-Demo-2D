@@ -192,7 +192,7 @@ GameObject:
   - component: {fileID: 107811788}
   - component: {fileID: 107811787}
   m_Layer: 5
-  m_Name: "u\u0131_text_0_value"
+  m_Name: ui_text_0_value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -403,7 +403,7 @@ GameObject:
   - component: {fileID: 225328570}
   - component: {fileID: 225328569}
   m_Layer: 5
-  m_Name: "u\u0131_text_6_value"
+  m_Name: ui_text_6_value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -909,7 +909,7 @@ GameObject:
   - component: {fileID: 312289643}
   - component: {fileID: 312289642}
   m_Layer: 5
-  m_Name: "u\u0131_text_4_value"
+  m_Name: ui_text_4_value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1044,7 +1044,7 @@ GameObject:
   - component: {fileID: 332650670}
   - component: {fileID: 332650669}
   m_Layer: 5
-  m_Name: "u\u0131_text_5_value"
+  m_Name: ui_text_5_value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1204,7 +1204,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 234}
+  m_AnchoredPosition: {x: 0, y: 279}
   m_SizeDelta: {x: 350, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &342120251
@@ -1724,7 +1724,7 @@ GameObject:
   - component: {fileID: 431643077}
   - component: {fileID: 431643076}
   m_Layer: 5
-  m_Name: "u\u0131_text_1_value"
+  m_Name: ui_text_1_value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2140,7 +2140,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.094562106, g: 0.3710315, b: 0.8018868, a: 0}
+  m_BackGroundColor: {r: 0.764151, g: 0.62303734, b: 0.378471, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -2276,7 +2276,7 @@ GameObject:
   - component: {fileID: 567961007}
   - component: {fileID: 567961006}
   m_Layer: 5
-  m_Name: "u\u0131_text_7_value"
+  m_Name: ui_text_7_value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2458,17 +2458,17 @@ MonoBehaviour:
   earnedprize_item: {fileID: 5702349017230913008, guid: 3ebbea97d61f8234f8d8eb3c936aa697, type: 3}
   earnedprize_dataitem: {fileID: 3061035236442178685, guid: 7c2452a070a6b8f428da1f9457c4e194, type: 3}
   gameOverPanel: {fileID: 1569091143}
+  gameOverPanelClaimText: {fileID: 1327830568}
+  gameOverPanelLoseText: {fileID: 990690423}
   earnedprize_item_parent: {fileID: 1311474292}
   SpinningWheel: {fileID: 2126881112}
   ui_text_button_spin: {fileID: 409259028}
+  ui_text_button_claim: {fileID: 503445916}
   ui_text_button_spin_text: {fileID: 276109036}
   ui_text_level_value: {fileID: 860953006}
   ui_text_nextsafezone_value: {fileID: 1416360441}
   ui_text_nextsuperzone_value: {fileID: 1636656174}
   audioSource: {fileID: 574606921}
-  tickAudioClip: {fileID: 8300000, guid: f64c21814a45d3244b4e25c2f41d0210, type: 3}
-  volume: 1
-  pitch: 1
   rewardPool:
   - {fileID: 11400000, guid: f24b032501d29b04bb6ba8e3f0cb1690, type: 2}
   - {fileID: 11400000, guid: 3a6b1d0455b8d594f80e77b7fd10e018, type: 2}
@@ -2500,6 +2500,33 @@ MonoBehaviour:
   - {fileID: 1318263268}
   - {fileID: 59505459}
   - {fileID: 869561220}
+  rewardPlaceHolderImageChild:
+  - {fileID: 1305624209}
+  - {fileID: 1238784649}
+  - {fileID: 357623664}
+  - {fileID: 996366823}
+  - {fileID: 520535314}
+  - {fileID: 1865211109}
+  - {fileID: 2146160309}
+  - {fileID: 196015708}
+  rewardPlaceHolderImageChildRectTransform:
+  - {fileID: 1305624208}
+  - {fileID: 1238784648}
+  - {fileID: 357623663}
+  - {fileID: 996366822}
+  - {fileID: 520535313}
+  - {fileID: 1865211108}
+  - {fileID: 2146160308}
+  - {fileID: 196015707}
+  rewardPlaceHolderTextChild:
+  - {fileID: 107811787}
+  - {fileID: 431643076}
+  - {fileID: 576605264}
+  - {fileID: 1078914799}
+  - {fileID: 312289642}
+  - {fileID: 332650669}
+  - {fileID: 225328569}
+  - {fileID: 567961006}
   wheelContent:
   - {fileID: 908810194}
   - {fileID: 1538240326}
@@ -2510,7 +2537,6 @@ MonoBehaviour:
   - {fileID: 59505460}
   - {fileID: 869561221}
   earnedPrizes: []
-  level: 1
 --- !u!82 &574606921
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2619,7 +2645,7 @@ GameObject:
   - component: {fileID: 576605265}
   - component: {fileID: 576605264}
   m_Layer: 5
-  m_Name: "u\u0131_text_2_value"
+  m_Name: ui_text_2_value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3638,7 +3664,7 @@ GameObject:
   - component: {fileID: 1078914800}
   - component: {fileID: 1078914799}
   m_Layer: 5
-  m_Name: "u\u0131_text_3_value"
+  m_Name: ui_text_3_value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
