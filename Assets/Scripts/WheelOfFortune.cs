@@ -7,7 +7,10 @@ using DG.Tweening;
 
 public class WheelOfFortune : MonoBehaviour
 {
-    [Range(1, 15)] public int spinDuration = 5;
+    [SerializeField] private GameSettings _gameSettings;
+    [SerializeField] private WheelSprites _wheelSprites;
+    [SerializeField] private Image image_spinning_wheel;
+    [SerializeField] private Image Image_spinning_wheel_indicator;
     [SerializeField] private GameObject earnedprize_item;
     [SerializeField] private GameObject earnedprize_dataitem;
     [SerializeField] private GameObject gameOverPanel;
@@ -19,11 +22,13 @@ public class WheelOfFortune : MonoBehaviour
     [SerializeField] private TextMeshProUGUI ui_text_nextsafezone_value;
     [SerializeField] private TextMeshProUGUI ui_text_nextsuperzone_value;
     [Space]
+    [Header("Sound")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip tickAudioClip;
     [SerializeField] [Range(0f, 1f)] private float volume = .5f;
     [SerializeField] [Range(-3f, 3f)] private float pitch = 1f;
     [Space]
+    [Header("Item Pools")]
     [SerializeField] private RewardType[] rewardPool;
     [SerializeField] private RewardType[] rewardPoolForSuperZone;
     [SerializeField] private Transform[] rewardPlaceHolder;
@@ -31,23 +36,26 @@ public class WheelOfFortune : MonoBehaviour
     public WheelContent[] wheelContent = new WheelContent[8];
     public List<WheelContent> earnedPrizes = new();
 
-
     private bool isSpinning = false;
     private double accumulatedWeight = 0;
-    private int maxIndex = 8; //Çarkda 8 boş alan olduğundan.
     [HideInInspector] public int level = 1;
     private System.Random randomFromSystem = new System.Random();
-    private int nextSafeZone = 5;
-    private int nextSuperZone = 30;
+    private int nextSafeZone;
+    private int nextSuperZone;
     GameObject spawnObject;
-    [HideInInspector] public int index;
+    [HideInInspector] private int index;
     void Start()
     {
+        nextSafeZone = _gameSettings.SafeZoneLevel;
+        nextSuperZone = _gameSettings.SuperZoneLevel;
+
         ui_text_nextsafezone_value.text = "Safezone " + nextSafeZone;
         ui_text_nextsuperzone_value.text = "Superzone " + nextSuperZone;
+
         FillWheelWithRewards();
         SetupAudio();
         ui_text_level_value.text = level.ToString();
+        
     }
 
 
@@ -61,18 +69,18 @@ public class WheelOfFortune : MonoBehaviour
 
             index = GetRandomReward();
             float angle = -(45 * index);
-            float rightOffset = (angle - 13f) % 360;
-            float leftOffset = (angle + 13) % 360;
-            float randomAngle = Random.Range(leftOffset, rightOffset);
+            float RewardPlaceHolderRightOffset = (angle - _gameSettings.RewardPlaceHolderOffset) % 360;
+            float RewardPlaceHolderLeftOffset = (angle + _gameSettings.RewardPlaceHolderOffset) % 360;
+            float randomAngle = Random.Range(RewardPlaceHolderLeftOffset, RewardPlaceHolderRightOffset);
 
-            Vector3 targetRotation = Vector3.back * (randomAngle + (2 * 360 * spinDuration));
+            Vector3 targetRotation = Vector3.back * (randomAngle + (_gameSettings.WheelTurnCount * 360 * _gameSettings.SpinDuration));
 
             float prevAngle;
             prevAngle = SpinningWheel.eulerAngles.z;
             float sumDeltaRotationZ = 0;
 
             SpinningWheel
-                .DORotate(targetRotation, spinDuration, RotateMode.Fast)
+                .DORotate(targetRotation, _gameSettings.SpinDuration, RotateMode.Fast)
                 .SetEase(Ease.InOutQuart)
                 .OnUpdate(() =>
                 {
@@ -97,13 +105,13 @@ public class WheelOfFortune : MonoBehaviour
     private void FillWheelWithRewards()
     {
 
-        if (!(level % 30 == 0))
+        if (!(level % _gameSettings.SuperZoneLevel == 0))
         {
             GetRandomRewardsFromPool();
         }
         else
         {
-            nextSuperZone += 30;
+            nextSuperZone += _gameSettings.SuperZoneLevel;
             GetRandomRewardsFromPoolforSuperZone();
         }
 
@@ -129,13 +137,11 @@ public class WheelOfFortune : MonoBehaviour
     private void GetRandomRewardsFromPool()
     {
         List<int> LastRandoms = new();
-        for (int i = 0; i < maxIndex; i++)
+        for (int i = 0; i < _gameSettings.MaxContentCountInWheel; i++)
         {
+            int randomRewardPoolIndex;
 
-            int randomRewardPoolIndex = Random.Range(1, rewardPool.Length);
-
-
-            if (level % 5 == 0 || level == 1)
+            if (level % _gameSettings.SafeZoneLevel == 0 || level == 1)
             {
                 randomRewardPoolIndex = Random.Range(1, rewardPool.Length); //Bomba mutlaka 0.indeksde olmalıdır.
             }
@@ -163,7 +169,7 @@ public class WheelOfFortune : MonoBehaviour
 
     private void GetRandomRewardsFromPoolforSuperZone()
     {
-        for (int i = 0; i < maxIndex; i++)
+        for (int i = 0; i < _gameSettings.MaxContentCountInWheel; i++)
         {
             int randomRewardPoolIndex = Random.Range(0, rewardPoolForSuperZone.Length);
 
@@ -184,7 +190,7 @@ public class WheelOfFortune : MonoBehaviour
 
         for (int j = 0; j < wheelContent.Length; j++)
         {
-            if (r <= wheelContent[j].weight)
+            if (r <= wheelContent[j].Weight)
             {
                 return j;
             }
@@ -197,15 +203,15 @@ public class WheelOfFortune : MonoBehaviour
     {
         for (int i = 0; i < wheelContent.Length; i++)
         {
-            wheelContent[i].weight = 0f;
+            wheelContent[i].Weight = 0f;
         }
         accumulatedWeight = 0;
 
         for (int i = 0; i < wheelContent.Length; i++)
         {
             accumulatedWeight += wheelContent[i].Chance; //Toplam ağırlığı hesapla.
-            wheelContent[i].weight = accumulatedWeight; // Toplam ağırlığı ödüle ata.
-            Debug.Log(wheelContent[i].RewardName + " " + wheelContent[i].weight);
+            wheelContent[i].Weight = accumulatedWeight; // Toplam ağırlığı ödüle ata.
+            Debug.Log(wheelContent[i].RewardName + " " + wheelContent[i].Weight);
             //Chance sıfır olanları dahil etmeme kodu yaz.
         }
     }
@@ -221,7 +227,6 @@ public class WheelOfFortune : MonoBehaviour
     {
         if (wheelContent[index].RewardName == "Bomb")
         {
-            //Gameover
             GameOver();
         }
         else
@@ -235,20 +240,21 @@ public class WheelOfFortune : MonoBehaviour
             ui_text_button_spin_text.text = "Spin";
             isSpinning = false;
             level++;
-            if (level % 5 == 0)
+            if (level % _gameSettings.SafeZoneLevel == 0)
             {
-                nextSafeZone += 5;
+                nextSafeZone += _gameSettings.SafeZoneLevel;
             }
             ui_text_level_value.text = level.ToString();
             ui_text_nextsafezone_value.text = "Safezone " + nextSafeZone;
             ui_text_nextsuperzone_value.text = "Superzone " + nextSuperZone;
             FillWheelWithRewards();
+            UpdateWheelSprite();
         }
 
     }
 
-    bool itemExist;
-    int j = 0;
+    private bool itemExist;
+    private int itemIndex = 0;
     GameObject item;
     private void UpdateEarnedPrizes(int index)
     {
@@ -259,7 +265,7 @@ public class WheelOfFortune : MonoBehaviour
             if (earnedPrizes[i].name == wheelItem.RewardName)
             {
                 itemExist = true;
-                earnedPrizes[i].Amount = earnedPrizes[i].Amount + wheelItem.Amount;
+                earnedPrizes[i].Amount += wheelItem.Amount;
                 Debug.Log(earnedPrizes[i].RewardName + " miktarı " + earnedPrizes[i].Amount);
                 if (item != null)
                 {
@@ -269,10 +275,10 @@ public class WheelOfFortune : MonoBehaviour
                         {
                             earnedprize_item_parent.transform.GetChild(x).transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = earnedPrizes[i].Amount.ToString();
 
-                            spawnObject = Instantiate(wheelItem.obje);
+                            spawnObject = Instantiate(wheelItem.Object);
                             spawnObject.transform.parent = transform;
-                            spawnObject.transform.position = wheelItem.obje.transform.position;
-                            spawnObject.transform.rotation = wheelItem.obje.transform.rotation;
+                            spawnObject.transform.position = wheelItem.Object.transform.position;
+                            spawnObject.transform.rotation = wheelItem.Object.transform.rotation;
                             StartCoroutine(MoveInCanvas(spawnObject, earnedprize_item_parent.transform.GetChild(x).gameObject));
                         }
                     }
@@ -284,26 +290,26 @@ public class WheelOfFortune : MonoBehaviour
         if (itemExist == false)
         {
             earnedPrizes.Add(InstantiateDataItem().GetComponent<WheelContent>());
-            earnedPrizes[j].RewardName = wheelItem.RewardName;
-            earnedPrizes[j].Amount = wheelItem.Amount;
-            earnedPrizes[j].Icon = wheelItem.Icon;
-            earnedPrizes[j].name = wheelItem.RewardName;
+            earnedPrizes[itemIndex].RewardName = wheelItem.RewardName;
+            earnedPrizes[itemIndex].Amount = wheelItem.Amount;
+            earnedPrizes[itemIndex].Icon = wheelItem.Icon;
+            earnedPrizes[itemIndex].name = wheelItem.RewardName;
 
             item = InstantiateEPItem();
 
-            item.transform.GetChild(0).GetComponent<Image>().sprite = earnedPrizes[j].Icon;
-            item.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = earnedPrizes[j].Amount.ToString();
+            item.transform.GetChild(0).GetComponent<Image>().sprite = earnedPrizes[itemIndex].Icon;
+            item.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = earnedPrizes[itemIndex].Amount.ToString();
 
-            Debug.Log(earnedPrizes[j].RewardName + " listeye eklendi.");
+            Debug.Log(earnedPrizes[itemIndex].RewardName + " listeye eklendi.");
             item.SetActive(false);
 
-            spawnObject = Instantiate(wheelItem.obje);
+            spawnObject = Instantiate(wheelItem.Object);
             spawnObject.transform.parent = transform;
-            spawnObject.transform.position = wheelItem.obje.transform.position;
-            spawnObject.transform.rotation = wheelItem.obje.transform.rotation;
+            spawnObject.transform.position = wheelItem.Object.transform.position;
+            spawnObject.transform.rotation = wheelItem.Object.transform.rotation;
             StartCoroutine(MoveInCanvas(spawnObject, item));
 
-            j++;
+            itemIndex++;
         }
 
 
@@ -313,14 +319,15 @@ public class WheelOfFortune : MonoBehaviour
         return Instantiate(earnedprize_dataitem);
     }
 
-    float posY = -55;
+
+    private float posY = -110;
     private GameObject InstantiateEPItem()
     {
         GameObject item = Instantiate(earnedprize_item, earnedprize_item_parent);
 
         RectTransform rectTransform = item.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, rectTransform.anchoredPosition.y + posY);
-        posY += -55;
+        posY += -110;
 
         return item;
     }
@@ -354,5 +361,30 @@ public class WheelOfFortune : MonoBehaviour
             Destroy(icon);
             target.SetActive(true);
         }
+    }
+
+    private void UpdateWheelSprite()
+    {
+        if (level % _gameSettings.SuperZoneLevel == 0)
+        {
+            image_spinning_wheel.sprite = _wheelSprites.WheelGoldenBase;
+            Image_spinning_wheel_indicator.sprite = _wheelSprites.WheelGoldenIndicator;
+
+        }
+        else if (level % _gameSettings.SafeZoneLevel == 0)
+        {
+            image_spinning_wheel.sprite = _wheelSprites.WheelSilverBase;
+            Image_spinning_wheel_indicator.sprite = _wheelSprites.WheelSilverIndicator;
+        }
+        else
+        {
+            image_spinning_wheel.sprite = _wheelSprites.WheelBronzeBase;
+            Image_spinning_wheel_indicator.sprite = _wheelSprites.WheelBronzeIndicator;
+        }
+    }
+
+    private void UpdateText(TextMeshProUGUI textObject, string text)
+    {
+        textObject.text = text;
     }
 }
