@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fe4b805e6e553247a734344d4771fa3, type: 3}
   m_Name: Game Settings
   m_EditorClassIdentifier: 
-  _earnedPrizeItem: {fileID: 0}
-  _earnedPrizeOffset: 0
+  _spacingBetweenEarnedPrizes: -55
